@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro</title>
+</head>
+<body>
+  <h1>Cadastro de plano</h1>
+
+  <form action="/planos" method="POST">
+    <p>Nome:</p>
+    <input type="text" name="nome" maxlength="100" required>
+
+    <p>Valor:</p>
+    <input type="number" name="valor" required>
+
+    <p>Duração (meses):</p>
+    <select name="duracaoMeses" required>
+      <option value="">Selecione</option>
+      <option value="1">1</option>
+      <option value="3">3</option>
+      <option value="6">6</option>
+      <option value="12">12</option>
+    </select>
+
+    <button type="submit">Enviar</button>
+  </form>
+</body>
+</html>

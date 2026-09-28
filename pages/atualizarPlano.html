@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Atualizar Plano</title>
+</head>
+<body>
+  <h1>Atualizar plano</h1>
+
+  <form id="formAtualizarPlano">
+    <p>ID:</p>
+    <input type="number" name="id" required>
+
+    <p>Nome:</p>
+    <input type="text" name="nome" maxlength="100" required>
+
+    <p>Valor:</p>
+    <input type="number" name="valor" step="0.01" required>
+
+    <p>Duração (meses):</p>
+    <select name="duracaoMeses" required>
+      <option value="">Selecione</option>
+      <option value="1">1</option>
+      <option value="3">3</option>
+      <option value="6">6</option>
+      <option value="12">12</option>
+    </select>
+
+    <button type="submit">Atualizar</button>
+  </form>
+
+  <p id="mensagem"></p>
+
+  <script>
+    const form = document.getElementById('formAtualizarPlano');
+    const mensagem = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const id = form.elements.id.value;
+      const resposta = await fetch(`/planos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nome: form.elements.nome.value,
+          valor: Number(form.elements.valor.value),
+          duracaoMeses: Number(form.elements.duracaoMeses.value)
+        })
+      });
+
+      mensagem.textContent = await resposta.text();
+    });
+  </script>
+</body>
+</html>
