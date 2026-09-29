@@ -1,7 +1,5 @@
-const { Sequelize, DataTypes } = require("../config/db_sequelize");
-
-module.exports = (sequelize, Sequelize)=>{
-    const Ficha = sequelize.define('ficha', {
+module.exports = (sequelize, Sequelize, DataTypes)=>{
+    const Treino = sequelize.define('ficha', {
         treinoId:{
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -27,13 +25,13 @@ module.exports = (sequelize, Sequelize)=>{
             allowNull: false,
             validate: { validarData(value){
                     if(this.treinoDataIn && this.treinoDataFim <= this.treinoDataIn){
-                        throw new Error('Data de fim deve ser posterior à data de início');
+                        throw new Error('Data de fim deve ser posterior à data de início', {statusCode: 500});
                     }
                 }
             }
         }
     },{ 
-        tableName: 'ficha',
+        tableName: 'treino',
         timeStamps: false,
 
         hooks:{
@@ -41,12 +39,12 @@ module.exports = (sequelize, Sequelize)=>{
                 if(!ficha.treinoDataFim){
                     const dataFim = ficha.treinoDataIn;
                     
-                    dataFim.setMonth(dataFim.getMonth() + 6);
+                    dataFim.setDate(dataFim.getDate() + 10);
                     ficha.treinoDataFim = dataFim;
                 }
             }
         }
     });
 
-    return Ficha;
+    return Treino;
 }

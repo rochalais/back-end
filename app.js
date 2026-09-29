@@ -8,11 +8,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-/* RODAR SOMENTE A PRIMEIRA VEZ PARA CRIAR A TABELA NO BANCO DE DADOS, DEPOIS COMENTAR ESSE BLOCO
-db.sequelize.sync({ force: true }).then(() => {
-  console.log('{ force: true }');
+
+db.sequelize.sync({ alter: true }).then(() => {
+  console.log('{ alter: true }');
 });
-*/
 
 app.use(planosRoutes);
 
