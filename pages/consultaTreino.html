@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,26 +27,26 @@
 
         </label for="treino_data_fim">Data de término: </label>
         <input type="date" id="treino_data_fim" name="treino_data_fim" readonly>
+
+        <script>
+            document.getElementById('consulta').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const id = document.getElementById('treino_id').value;
+                const res = await fetch(`/treinos/${id}`);
+
+                if(!res.ok){
+                    alert('Treino não encontrado');
+                    return;
+                }
+
+                const treino = await res.json();
+
+                document.getElementById('treino_nome').value = treino.treinoNome;
+                document.getElementById('treino_objetivo').value = treino.treinoObjetivo;
+                document.getElementById('treino_data_in').value = treino.treinoDataIn;
+                document.getElementById('treino_data_fim').value = treino.treinoDataFim;
+            })
+        </script>
     </body>
-
-    <script>
-        document.getElementById('consulta').addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const id = document.getElementById('treino_id').value;
-            const res = await fetch(`/treinos/${id}`);
-
-            if(!res.ok){
-                alert('Treino não encontrado');
-                return;
-            }
-
-            const treino = await res.json();
-
-            document.getElementById('treino_nome').value = treino.treinoNome;
-            document.getElementById('treino_objetivo').value = treino.treinoObjetivo;
-            document.getElementById('treino_data_in').value = treino.treinoDataIn;
-            document.getElementById('treino_data_fim').value = treino.treinoDataFim;
-        })
-    </script>
 </html>
