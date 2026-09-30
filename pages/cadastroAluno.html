@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro</title>
+</head>
+<body>
+
+  <h1>Cadastro de aluno</h1>
+
+  <form action="/alunos" method="POST">
+    <p>Nome:</p>
+    <input type="text" name="nome" maxlength="100" required>
+
+    <p>CPF:</p>
+    <input type="text" name="cpf" maxlength="11" required>
+
+    <p>E-mail:</p>
+    <input type="email" name="email" required>
+
+    <p>Telefone:</p>
+    <input type="text" name="telefone" required>
+
+    <p>Data de nascimento:</p>
+    <input type="date" name="dataNascimento" required>
+
+    <p>ID do plano:</p>
+    <input type="number" name="planoId" min="1" required>
+
+    <button type="submit">Enviar</button>
+
+  </form>
+
+</body>
+</html>
+

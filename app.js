@@ -1,5 +1,6 @@
 const express = require('express');
 const planosRoutes = require('./routes/planosRoutes');
+const alunoRoutes = require('./routes/alunoRoutes');
 const db = require('./config/db_sequelize');
 
 const app = express();
@@ -8,13 +9,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-/* RODAR SOMENTE A PRIMEIRA VEZ PARA CRIAR A TABELA NO BANCO DE DADOS, DEPOIS COMENTAR ESSE BLOCO
+/* RODAR SOMENTE A PRIMEIRA VEZ PARA CRIAR A TABELA NO BANCO DE DADOS, DEPOIS COMENTAR ESSE BLOCO 
 db.sequelize.sync({ force: true }).then(() => {
   console.log('{ force: true }');
 });
 */
 
 app.use(planosRoutes);
+app.use(alunoRoutes);
 
 app.get('/', (req, res) => {
   res.send('Página Inicial');
