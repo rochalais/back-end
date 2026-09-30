@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize, DataTypes)=>{
-    const Treino = sequelize.define('ficha', {
+    const Treino = sequelize.define('treino', {
         treinoId:{
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -35,12 +35,12 @@ module.exports = (sequelize, Sequelize, DataTypes)=>{
         timeStamps: false,
 
         hooks:{
-            beforeValidate: (ficha)=>{
-                if(!ficha.treinoDataFim){
-                    const dataFim = ficha.treinoDataIn;
+            beforeValidate: (treino)=>{
+                if(!treino.treinoDataFim){
+                    const dataFim = new Date(treino.treinoDataIn);
                     
                     dataFim.setDate(dataFim.getDate() + 10);
-                    ficha.treinoDataFim = dataFim;
+                    treino.treinoDataFim = dataFim;
                 }
             }
         }

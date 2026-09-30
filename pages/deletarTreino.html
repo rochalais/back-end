@@ -3,16 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Deletar Treino</title>
     </head>
     <body>
         <h1>Deletar treino por ID</h1>
 
         <form id="formulario_delecao">
             <label for="treino_id">ID: </label>
-            <input type="number" name="treino_id" id="treino_id">
+            <input type="number" name="treino_id" id="treino_id" min="1" required>
             
-            <button type="submit"></button>
+            <button type="submit">Deletar</button>
         </form>
 
         <script>
@@ -21,14 +21,14 @@
             formulario.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
-                const id = form.elements.treino_id.value
+                const id = formulario.elements.treino_id.value
                 const resposta = await fetch(`/treinos/${id}`, {
                     method: 'DELETE'
                 });
 
-                alert(resposta.text());
+                alert(await resposta.text());
 
-                if(resposta.ok) form.reset();
+                if(resposta.ok) formulario.reset();
             })
         </script>
     </body>

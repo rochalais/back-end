@@ -10,7 +10,7 @@
 
         <form id="atualizar_treino">
             <label for="treino_id">ID: </label>
-            <input type="number" name="treino_id" id="treino_id">
+            <input type="number" name="treino_id" id="treino_id" min="1" required>
 
             <label for="treino_nome">Novo título: </label>
             <input type="text" name="treino_nome" id="treino_nome">
@@ -21,7 +21,7 @@
             <label for="treino_data_fim">Nova data de fim: </label>
             <input type="date" name="treino_data_fim" id="treino_data_fim">
 
-            <button type="submit"></button>
+            <button type="submit">Atualizar</button>
         </form>
         <script>
             const formulario = document.getElementById('atualizar_treino');
@@ -30,15 +30,15 @@
                 event.preventDefault();
 
                 const id = formulario.elements.treino_id.value;
-                const respostaConsulta = await fetch(`treinos/${id}`, {
+                const respostaConsulta = await fetch(`/treinos/${id}`, {
                     method: 'PUT',
                     headers:{
                         'Content-Type':'application/json'
                     },
                     body:JSON.stringify({
-                        treinoNome: formulario.elements.treino_nome,
-                        treinoObjetivo: formulario.elements.treino_objetivo,
-                        treinoDataFim: Date(formulario.elements.treino_data_fim)
+                        treinoNome: formulario.elements.treino_nome.value.trim(),
+                        treinoObjetivo: formulario.elements.treino_objetivo.value.trim(),
+                        treinoDataFim: new Date(formulario.elements.treino_data_fim.value)
                     })
                 });
 

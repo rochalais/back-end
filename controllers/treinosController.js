@@ -11,10 +11,10 @@ exports.listarTodos = async (req, res)=>{
         const limite = 10;
         const offset = (pagina - 1) * limite;
 
-        const resultado = await Ficha.findAndCountAll({
+        const resultado = await db.treino.findAndCountAll({
             limit: limite,
             offset: offset,
-            order: [['id', 'ASC']]
+            order: [['treinoId', 'ASC']]
         });
 
         res.json({
@@ -46,16 +46,20 @@ exports.cadastrar = async (req, res)=>{
     if(req.body.treino_data_fim === '') req.body.treino_data_fim = undefined;
 
     try{
-        await db.treino.create({
+        const treino = await db.treino.create({
             treinoNome: req.body.treino_nome,
             treinoObjetivo: req.body.treino_objetivo,
             treinoDataIn: req.body.treino_data_in,
             treinoDataFim: req.body.treino_data_fim
         });
+
+        console.log('CRIADO', treino.json);
+        if(treino) res.status(200).send('Criado');
+        else res.status(500).send('Não criado');
+
     } catch(error){
-        return res.json(error)
+        return res.status(400).json(error)
     }
-    res.send('Treino cadastrado');
 }
 
 exports.atualizar = async (req, res)=>{
@@ -67,15 +71,15 @@ exports.atualizar = async (req, res)=>{
         if(req.body.treinoObjetivo === '') req.body.treinoObjetivo = treino.treinoObjetivo;
         if(req.body.treinoDataFim === '') req.body.treinoDataFim = treino.treinoDataFim;
 
-        const nLinhas = await treino.update({
+        const treinoUp = await treino.update({
             treinoNome: req.body.treinoNome,
             treinoObjetivo: req.body.treinoObjetivo,
             treinoDataFim: req.body.treinoDataFim
         });
 
-        if(nLinhas > 0 ) res.status(200).send('Atualização concluída com sucesso');
+        if(treinoUp) res.status(200).send('Atualização concluída com sucesso');
     } catch(e){
-        return res.json(e);
+        return res.status(400).json(e);
     }
 }
 
@@ -83,13 +87,13 @@ exports.deletar = async (req, res)=>{
     try{
         const treino = await db.treino.findByPk(req.params.id);
 
-        if(!plano){ res.status(404).send('Treino não encontrado'); return;}
+        if(!treino){ res.status(404).send('Treino não encontrado'); return;}
         else{
-            const nLinhas = await treino.destroy();
+            const treinoDel = await treino.destroy();
 
-            if(nLinhas > 0) res.status(200).send(`Plano deletado, ${nlinhas-1} outros registros afetados`);
+            if(treinoDel) res.status(200).send(`Treino deletado`);
         }
     } catch(e){
-        return res.json(e);
+        return res.status(400).json(e);
     }
 }

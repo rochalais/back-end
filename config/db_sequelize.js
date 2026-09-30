@@ -17,6 +17,6 @@ db.sequelize = sequelize;
 db.DataTypes = Sequelize.DataTypes;
 
 db.plano = require('../models/plano.js')(sequelize, Sequelize);
-db.ficha = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTypes);
+db.treino = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTypes);
 
 module.exports = db;
