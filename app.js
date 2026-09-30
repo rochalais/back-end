@@ -14,6 +14,7 @@ db.sequelize.sync({ alter: true }).then(() => {
 });
 
 app.use(planosRoutes);
+app.use(treinosRoutes);
 
 app.get('/', (req, res) => {
   res.send('Página Inicial');
