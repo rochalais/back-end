@@ -1,5 +1,6 @@
 const express = require('express');
 const planosRoutes = require('./routes/planosRoutes');
+const treinosRoutes = require('./routes/treinosRoutes');
 const db = require('./config/db_sequelize');
 
 const app = express();
