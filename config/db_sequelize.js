@@ -18,6 +18,7 @@ db.DataTypes = Sequelize.DataTypes;
 
 db.plano = require('../models/plano.js')(sequelize, Sequelize);
 <<<<<<< HEAD
+<<<<<<< HEAD
 db.aluno = require('../models/aluno.js')(sequelize, Sequelize);
 db.treino = require('../models/treino.js')(sequelize, Sequelize);
 
@@ -26,5 +27,8 @@ db.aluno.belongsTo(db.plano, {foreignKey: 'plano_id'});
 =======
 db.ficha = require('../models/ficha.js')(sequelize, Sequelize);
 >>>>>>> 37bc233 (em desenvolvimento...)
+=======
+db.ficha = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTypes);
+>>>>>>> e912fb5 (consulta)
 
 module.exports = db;
