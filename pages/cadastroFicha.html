@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro de ficha</title>
+    </head>
+
+    <body>
+        <h1>Cadastro de ficha</h1>
+
+        <form id="formulario_ficha">
+            <div class="campos">
+                <div>
+                    <label for="treino_id">ID do treino</label>
+                    <input type="number" id="treino_id" min="1" required>
+                </div>
+                <div>
+                    <label for="dia">Dia</label>
+                    <select id="dia" required>
+                        <option value="">Selecione</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                    </select>
+                </div>
+            </div>
+
+            <h2>Exercícios</h2>
+            <div id="lista_exercicios"></div>
+
+            <button type="button" id="adicionar">Adicionar exercício</button>
+            <button type="submit">Cadastrar ficha</button>
+        </form>
+
+        <p id="mensagem" role="status"></p>
+
+        <template id="modelo_exercicio">
+            <div class="exercicio">
+                <div class="nome">
+                    <label>Nome</label>
+                    <input type="text" class="ex-nome" required>
+                </div>
+                <div>
+                    <label>Séries</label>
+                    <input type="number" class="ex-series" min="1" required>
+                </div>
+                <div>
+                    <label>Repetições</label>
+                    <input type="number" class="ex-repeticoes" min="1">
+                </div>
+                <button type="button" class="remover">Remover</button>
+            </div>
+        </template>
+
+        <script>
+            const formulario = document.getElementById('formulario_ficha');
+            const lista = document.getElementById('lista_exercicios');
+            const modelo = document.getElementById('modelo_exercicio');
+            const mensagem = document.getElementById('mensagem');
+
+            function adicionarLinha() {
+                lista.appendChild(modelo.content.cloneNode(true));
+                lista.lastElementChild.querySelector('.ex-nome').focus();
+                atualizarBotoesRemover();
+            }
+
+            function atualizarBotoesRemover() {
+                const linhas = lista.querySelectorAll('.exercicio');
+                linhas.forEach(l => l.querySelector('.remover').disabled = linhas.length === 1);
+            }
+
+            function mostrarMensagem(texto, classe) {
+                mensagem.textContent = texto;
+                mensagem.className = classe;
+            }
+
+            document.getElementById('adicionar').addEventListener('click', adicionarLinha);
+
+            lista.addEventListener('click', (event) => {
+                if (!event.target.classList.contains('remover')) return;
+                event.target.closest('.exercicio').remove();
+                atualizarBotoesRemover();
+            });
+
+            formulario.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const exercicios = [...lista.querySelectorAll('.exercicio')].map(linha => {
+                    const exercicio = {
+                        nome: linha.querySelector('.ex-nome').value.trim(),
+                        series: Number(linha.querySelector('.ex-series').value)
+                    };
+                    const repeticoes = linha.querySelector('.ex-repeticoes').value;
+                    if (repeticoes) exercicio.repeticoes = Number(repeticoes); 
+                    return exercicio;
+                });
+
+                const dados = {
+                    treinoId: Number(document.getElementById('treino_id').value),
+                    dia: Number(document.getElementById('dia').value),
+                    exercicios
+                };
+
+                try {
+                    const resposta = await fetch('/fichas/cadastro', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+
+                    if (resposta.ok) {
+                        const corpo = await resposta.json();
+                        mostrarMensagem(`${corpo.mensagem} (id: ${corpo.id})`, 'ok');
+                        formulario.reset();
+                        lista.innerHTML = '';
+                        adicionarLinha();
+                    } else {
+                        mostrarMensagem(await resposta.text(), 'erro');
+                    }
+                } catch (erro) {
+                    console.error(erro);
+                    mostrarMensagem('Erro de comunicação com o servidor', 'erro');
+                }
+            });
+
+            adicionarLinha();
+        </script>
+    </body>
+</html>

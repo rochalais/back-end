@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Deleção de ficha</title>
+    </head>
+
+    <body>
+        <h1>Deleção de ficha</h1>
+
+        <h2>1. Buscar fichas do treino</h2>
+        <form id="busca">
+            <label for="treino_id">ID do treino: </label>
+            <input type="number" id="treino_id" min="1" required>
+            <button type="submit">Buscar</button>
+        </form>
+
+        <form id="delecao" hidden>
+            <h2>2. Escolher a ficha a deletar</h2>
+
+            <label for="ficha_select">Ficha: </label>
+            <select id="ficha_select"></select>
+
+            <table id="detalhes" border="1">
+                <thead>
+                    <tr>
+                        <th>Exercício</th>
+                        <th>Séries</th>
+                        <th>Repetições</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo_detalhes"></tbody>
+            </table>
+
+            <button type="submit">Deletar ficha</button>
+        </form>
+
+        <p id="mensagem" role="status"></p>
+
+        <script>
+            const formBusca = document.getElementById('busca');
+            const formDelecao = document.getElementById('delecao');
+            const fichaSelect = document.getElementById('ficha_select');
+            const corpoDetalhes = document.getElementById('corpo_detalhes');
+            const mensagem = document.getElementById('mensagem');
+
+            let fichas = [];
+
+            function celula(texto) {
+                const td = document.createElement('td');
+                td.textContent = texto;
+                return td;
+            }
+            function mostrarDetalhes() {
+                corpoDetalhes.innerHTML = '';
+                const ficha = fichas[Number(fichaSelect.value)];
+
+                ficha.exercicios.forEach(ex => {
+                    const linha = document.createElement('tr');
+                    linha.appendChild(celula(ex.nome));
+                    linha.appendChild(celula(ex.series));
+                    linha.appendChild(celula(ex.repeticoes ?? '-'));
+                    corpoDetalhes.appendChild(linha);
+                });
+            }
+
+            function preencherSelecao() {
+                fichaSelect.innerHTML = '';
+                fichas.forEach((f, i) => {
+                    const opcao = document.createElement('option');
+                    opcao.value = i;
+                    opcao.textContent = `Dia ${f.dia} (${f._id})`;
+                    fichaSelect.appendChild(opcao);
+                });
+                mostrarDetalhes();
+            }
+
+            formBusca.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                mensagem.textContent = '';
+                formDelecao.hidden = true;
+
+                const treinoId = document.getElementById('treino_id').value;
+
+                try {
+                    const resposta = await fetch(`/fichas/treinos/${treinoId}`);
+
+                    if (!resposta.ok) {
+                        mensagem.textContent = await resposta.text();
+                        return;
+                    }
+
+                    fichas = await resposta.json();
+
+                    preencherSelecao();
+                    formDelecao.hidden = false;
+                    mensagem.textContent = `${fichas.length} ficha(s) encontrada(s)`;
+
+                } catch (erro) {
+                    console.error(erro);
+                    mensagem.textContent = 'Erro de comunicação com o servidor';
+                }
+            });
+
+            fichaSelect.addEventListener('change', mostrarDetalhes);
+
+            formDelecao.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const indice = Number(fichaSelect.value);
+                const ficha = fichas[indice];
+
+                if (!confirm(`Deseja realmente deletar a ficha do dia ${ficha.dia}?`)) return;
+
+                try {
+                    const resposta = await fetch(`/fichas/${ficha._id}`, { method: 'DELETE' });
+                    const texto = await resposta.text();
+
+                    mensagem.textContent = texto;
+
+                    if (!resposta.ok) return;
+                    fichas.splice(indice, 1);
+
+                    if (fichas.length === 0) {
+                        formDelecao.hidden = true;
+                    } else {
+                        preencherSelecao();
+                    }
+
+                } catch (e) {
+                    console.error(e);
+                    mensagem.textContent = 'Erro de comunicação com o servidor';
+                }
+            });
+        </script>
+    </body>
+</html>
