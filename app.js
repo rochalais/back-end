@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'pages')));
 
-<<<<<<< HEAD
 db.sequelize.sync({ alter: true }).then(() => { //Com alter: true pode rodar mais de uma vez sem problema
   console.log('{ alter: true }');
 });
@@ -26,17 +25,12 @@ mongoose.connect(
   console.log('Conectado ao MongoDB');
 }).catch((e) => {
   console.log('Erro ', e);
-=======
-
-
-db.sequelize.sync({ alter: true }).then(() => {
-  console.log('{ alter: true }');
->>>>>>> e912fb5 (consulta)
 });
 
 app.use(planosRoutes);
 app.use(alunoRoutes);
 app.use(fichaRoutes);
+app.use(treinosRoutes);
 
 app.get('/', (req, res) => {
   res.send('Página Inicial');
