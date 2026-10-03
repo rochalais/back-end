@@ -14,9 +14,9 @@ const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.DataTypes = Sequelize.DataTypes;
 
 db.plano = require('../models/plano.js')(sequelize, Sequelize);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -34,5 +34,7 @@ db.ficha = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTy
 =======
 db.treino = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTypes);
 >>>>>>> c761741 (bug fixes)
+=======
+>>>>>>> 4ba5cdb (ajustes)
 
 module.exports = db;

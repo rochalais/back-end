@@ -1,6 +1,7 @@
 const express = require('express');
 const planosRoutes = require('./routes/planosRoutes');
 <<<<<<< HEAD
+<<<<<<< HEAD
 const alunoRoutes = require('./routes/alunoRoutes');
 =======
 const treinosRoutes = require('./routes/treinosRoutes');
@@ -12,12 +13,14 @@ const mongoose = require('mongoose');
 =======
 const path = require('path');
 >>>>>>> c761741 (bug fixes)
+=======
+const db = require('./config/db_sequelize');
+>>>>>>> 4ba5cdb (ajustes)
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'pages')));
 
 <<<<<<< HEAD
 db.sequelize.sync({ alter: true }).then(() => { //Com alter: true pode rodar mais de uma vez sem problema
@@ -41,9 +44,12 @@ mongoose.connect(
 });
 
 app.use(planosRoutes);
+<<<<<<< HEAD
 app.use(alunoRoutes);
 app.use(fichaRoutes);
 app.use(treinosRoutes);
+=======
+>>>>>>> 4ba5cdb (ajustes)
 
 app.get('/', (req, res) => {
   res.send('Página Inicial');
