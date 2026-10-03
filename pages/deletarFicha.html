@@ -85,7 +85,7 @@
                 const treinoId = document.getElementById('treino_id').value;
 
                 try {
-                    const resposta = await fetch(`/fichas/treino/${treinoId}`);
+                    const resposta = await fetch(`/fichas/treinos/${treinoId}`);
 
                     if (!resposta.ok) {
                         mensagem.textContent = await resposta.text();
