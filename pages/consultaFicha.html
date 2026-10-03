@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Consulta de fichas por treino</title>
+    </head>
+
+    <body>
+        <h1>Consulta de fichas por treino</h1>
+
+        <form id="consulta">
+            <label for="treino_id">ID do treino: </label>
+            <input type="number" id="treino_id" name="treino_id" min="1" required>
+
+            <button type="submit">Consultar</button>
+        </form>
+
+        <p id="mensagem" role="status"></p>
+
+        <div id="resultado"></div>
+
+        <script>
+            const formulario = document.getElementById('consulta');
+            const mensagem = document.getElementById('mensagem');
+            const resultado = document.getElementById('resultado');
+
+            function criar(tag, texto) {
+                const el = document.createElement(tag);
+                if (texto !== undefined) el.textContent = texto;
+                return el;
+            }
+
+            function montarFicha(ficha) {
+                const secao = criar('section');
+                secao.appendChild(criar('h2', `Dia ${ficha.dia}`));
+                secao.appendChild(criar('p', `ID da ficha: ${ficha._id}`));
+
+                const tabela = criar('table');
+                tabela.border = '1';
+
+                const cabecalho = criar('tr');
+                ['Exercício', 'Séries', 'Repetições'].forEach(t => cabecalho.appendChild(criar('th', t)));
+                tabela.appendChild(cabecalho);
+
+                ficha.exercicios.forEach(ex => {
+                    const linha = criar('tr');
+                    linha.appendChild(criar('td', ex.nome));
+                    linha.appendChild(criar('td', ex.series));
+                    linha.appendChild(criar('td', ex.repeticoes ?? '-'));
+                    tabela.appendChild(linha);
+                });
+
+                secao.appendChild(tabela);
+                return secao;
+            }
+
+            formulario.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                resultado.innerHTML = '';
+                mensagem.textContent = '';
+
+                const id = document.getElementById('treino_id').value;
+
+                try {
+                    const resposta = await fetch(`/fichas/treino/${id}`);
+
+                    if (!resposta.ok) {
+                        mensagem.textContent = await resposta.text();
+                        return;
+                    }
+
+                    const fichas = await resposta.json();
+
+                    mensagem.textContent = `Treino ${id}: ${fichas.length} ficha(s) encontrada(s)`;
+                    fichas.forEach(f => resultado.appendChild(montarFicha(f)));
+
+                } catch (e) {
+                    console.error(e);
+                    mensagem.textContent = 'Erro de comunicação com o servidor';
+                }
+            });
+        </script>
+    </body>
+</html>

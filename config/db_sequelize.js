@@ -18,9 +18,9 @@ db.DataTypes = Sequelize.DataTypes;
 
 db.plano = require('../models/plano.js')(sequelize, Sequelize);
 db.aluno = require('../models/aluno.js')(sequelize, Sequelize);
-db.treino = require('../models/treino.js')(sequelize, Sequelize, DataTypes);
+db.treino = require('../models/treino.js')(sequelize, Sequelize);
 
-db.plano.hasMany(db.aluno, {foreignKey: 'planoId'});
-db.aluno.belongsTo(db.plano, {foreignKey: 'planoId'});
+db.plano.hasMany(db.aluno, {foreignKey: 'plano_id'});
+db.aluno.belongsTo(db.plano, {foreignKey: 'plano_id'});
 
 module.exports = db;
