@@ -44,8 +44,8 @@
 
                 document.getElementById('treino_nome').value = treino.treinoNome;
                 document.getElementById('treino_objetivo').value = treino.treinoObjetivo;
-                document.getElementById('treino_data_in').value = treino.treinoDataIn;
-                document.getElementById('treino_data_fim').value = treino.treinoDataFim;
+                document.getElementById('treino_data_in').value = treino.treinoDataIn.slice(0, 10);
+                document.getElementById('treino_data_fim').value = treino.treinoDataFim.slice(0, 10);
             })
         </script>
     </body>

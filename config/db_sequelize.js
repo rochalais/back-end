@@ -19,6 +19,7 @@ db.DataTypes = Sequelize.DataTypes;
 db.plano = require('../models/plano.js')(sequelize, Sequelize);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 db.aluno = require('../models/aluno.js')(sequelize, Sequelize);
 db.treino = require('../models/treino.js')(sequelize, Sequelize);
 
@@ -30,5 +31,8 @@ db.ficha = require('../models/ficha.js')(sequelize, Sequelize);
 =======
 db.ficha = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTypes);
 >>>>>>> e912fb5 (consulta)
+=======
+db.treino = require('../models/treino.js')(sequelize, Sequelize, Sequelize.DataTypes);
+>>>>>>> c761741 (bug fixes)
 
 module.exports = db;

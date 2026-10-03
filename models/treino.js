@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 module.exports = (sequelize, Sequelize) => {
 
     const Treino = sequelize.define('treino', {
@@ -28,6 +29,10 @@ const { Sequelize, DataTypes } = require("../config/db_sequelize");
 module.exports = (sequelize, Sequelize)=>{
 <<<<<<< HEAD
     const Ficha = sequelize.define('treino', {
+=======
+module.exports = (sequelize, Sequelize, DataTypes)=>{
+    const Treino = sequelize.define('treino', {
+>>>>>>> c761741 (bug fixes)
         treinoId:{
             type: DataTypes.INTEGER,
 >>>>>>> 68a535c (modelo)
@@ -138,6 +143,7 @@ module.exports = (sequelize, Sequelize, DataTypes)=>{
 
         hooks:{
 <<<<<<< HEAD
+<<<<<<< HEAD
             beforeValidate: (treino)=>{
                 if(!treino.treinoDataFim){
                     const dataFim = treino.treinoDataIn;
@@ -153,6 +159,14 @@ module.exports = (sequelize, Sequelize, DataTypes)=>{
                     dataFim.setDate(dataFim.getDate() + 10);
                     ficha.treinoDataFim = dataFim;
 >>>>>>> e912fb5 (consulta)
+=======
+            beforeValidate: (treino)=>{
+                if(!treino.treinoDataFim){
+                    const dataFim = new Date(treino.treinoDataIn);
+                    
+                    dataFim.setDate(dataFim.getDate() + 10);
+                    treino.treinoDataFim = dataFim;
+>>>>>>> c761741 (bug fixes)
                 }
             }
         }

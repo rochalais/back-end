@@ -6,8 +6,12 @@ const alunoRoutes = require('./routes/alunoRoutes');
 const treinosRoutes = require('./routes/treinosRoutes');
 >>>>>>> 9ca193d (rota no app.js)
 const db = require('./config/db_sequelize');
+<<<<<<< HEAD
 const db_mongoose = require('./config/db_mongoose');
 const mongoose = require('mongoose');
+=======
+const path = require('path');
+>>>>>>> c761741 (bug fixes)
 
 const app = express();
 
@@ -15,7 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'pages')));
 
+<<<<<<< HEAD
 db.sequelize.sync({ alter: true }).then(() => { //Com alter: true pode rodar mais de uma vez sem problema
+=======
+
+db.sequelize.sync({ alter: true }).then(() => {
+>>>>>>> c761741 (bug fixes)
   console.log('{ alter: true }');
 });
 

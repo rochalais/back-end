@@ -33,7 +33,12 @@
             const anterior = document.getElementById('anterior');
             const proxima = document.getElementById('proxima');
             const paginaTexto = document.getElementById('paginaAtual');
-
+            function formatarData(valor) {
+                if (!valor) return '';
+                const [ano, mes, dia] = valor.slice(0, 10).split('-');
+                return `${dia}/${mes}/${ano}`;
+            }
+            
             async function carregarTreinos(pagina) {
                 try {
                     const resposta = await fetch(`/treinos/consultaGeral?pagina=${pagina}`);
@@ -48,11 +53,11 @@
                         const linha = document.createElement('tr');
 
                         linha.innerHTML = `
-                            <td>${treino.id}</td>
+                            <td>${treino.treinoId}</td>
                             <td>${treino.treinoNome}</td>
                             <td>${treino.treinoObjetivo}</td>
-                            <td>${treino.treinoDataIn}</td>
-                            <td>${treino.treinoDataFim}</td>
+                            <td>${formatarData(treino.treinoDataIn)}</td>
+                            <td>${formatarData(treino.treinoDataFim)}</td>
                         `;
 
                         tabela.appendChild(linha);
@@ -73,11 +78,11 @@
             }
 
             anterior.addEventListener('click', () => {
-                if (paginaAtual > 1)  carregarFichas(paginaAtual - 1);
+                if (paginaAtual > 1)  carregarTreinos(paginaAtual - 1);
             });
 
             proxima.addEventListener('click', () => {
-            if (paginaAtual < totalPaginas) carregarFichas(paginaAtual + 1);
+            if (paginaAtual < totalPaginas) carregarTreinos(paginaAtual + 1);
             });
 
             carregarTreinos(1);
