@@ -1,6 +1,10 @@
 const express = require('express');
 const planosRoutes = require('./routes/planosRoutes');
+<<<<<<< HEAD
 const alunoRoutes = require('./routes/alunoRoutes');
+=======
+const treinosRoutes = require('./routes/treinosRoutes');
+>>>>>>> 9ca193d (rota no app.js)
 const db = require('./config/db_sequelize');
 const db_mongoose = require('./config/db_mongoose');
 const mongoose = require('mongoose');
