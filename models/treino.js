@@ -1,45 +1,65 @@
-module.exports = (sequelize, Sequelize, DataTypes)=>{
+module.exports = (sequelize, Sequelize) => {
+
     const Treino = sequelize.define('treino', {
-        treinoId:{
-            type: DataTypes.INTEGER,
+        treinoId: {
+            type: Sequelize.INTEGER,
             autoIncrement: true,
             allowNull: false,
             primaryKey: true
         },
-        treinoNome:{
-            type: DataTypes.TEXT,
-            allowNull: true,
-            unique: true
+
+        treinoNome: {
+            type: Sequelize.TEXT,
+            allowNull: false
         },
-        treinoObjetivo:{
-            type: DataTypes.TEXT,
-            allowNull: true
+
+        treinoObjetivo: {
+            type: Sequelize.TEXT,
+            allowNull: false
         },
-        treinoDataIn:{
-            type: DataTypes.DATE,
+
+        alunoId: {
+            type: Sequelize.INTEGER,
             allowNull: false,
-            defaultValue: DataTypes.NOW
+            field: 'aluno_id'
         },
-        treinoDataFim:{
-            type: DataTypes.DATE,
+
+        treinoDataIn: {
+            type: Sequelize.DATE,
             allowNull: false,
-            validate: { validarData(value){
-                    if(this.treinoDataIn && this.treinoDataFim <= this.treinoDataIn){
-                        throw new Error('Data de fim deve ser posterior à data de início', {statusCode: 500});
+            defaultValue: Sequelize.NOW
+        },
+
+        treinoDataFim: {
+            type: Sequelize.DATE,
+            allowNull: false,
+            validate: {
+                validarData(value) {
+                    if (
+                        this.treinoDataIn &&
+                        new Date(value) <= new Date(this.treinoDataIn)
+                    ) {
+                        throw new Error(
+                            'Data de fim deve ser posterior à data de início'
+                        );
                     }
                 }
             }
         }
-    },{ 
-        tableName: 'treino',
-        timeStamps: false,
 
-        hooks:{
-            beforeValidate: (treino)=>{
-                if(!treino.treinoDataFim){
+    }, {
+        tableName: 'treino',
+        timestamps: false,
+
+        hooks: {
+            beforeValidate: (treino) => {
+
+                if (!treino.treinoDataFim) {
+
                     const dataFim = new Date(treino.treinoDataIn);
-                    
+
                     dataFim.setDate(dataFim.getDate() + 10);
+
                     treino.treinoDataFim = dataFim;
                 }
             }

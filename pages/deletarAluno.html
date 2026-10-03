@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Deletar Aluno</title>
+</head>
+<body>
+
+  <h1>Deletar aluno</h1>
+
+  <form id="formDeletarAluno">
+
+    <p>ID:</p>
+    <input type="number" name="id" required>
+
+    <button type="submit">Deletar</button>
+
+  </form>
+
+  <p id="mensagem"></p>
+
+  <script>
+
+    const form =
+      document.getElementById('formDeletarAluno');
+
+    const mensagem =
+      document.getElementById('mensagem');
+
+
+    form.addEventListener('submit', async (event) => {
+
+      event.preventDefault();
+
+
+      const id =
+        form.elements.id.value;
+
+
+      const resposta =
+        await fetch(`/alunos/${id}`, {
+          method: 'DELETE'
+        });
+
+
+      mensagem.textContent =
+        await resposta.text();
+
+
+      if (resposta.ok) {
+
+        form.reset(); 
+        } 
+
+    }); 
+
+    </script> 
+
+</body> 
+</html>
+

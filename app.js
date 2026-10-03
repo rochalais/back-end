@@ -1,5 +1,6 @@
 const express = require('express');
 const planosRoutes = require('./routes/planosRoutes');
+const alunoRoutes = require('./routes/alunoRoutes');
 const db = require('./config/db_sequelize');
 
 const app = express();
@@ -13,6 +14,7 @@ db.sequelize.sync({ alter: true }).then(() => {
 });
 
 app.use(planosRoutes);
+app.use(alunoRoutes);
 
 app.get('/', (req, res) => {
   res.send('Página Inicial');
