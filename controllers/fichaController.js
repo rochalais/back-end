@@ -4,7 +4,7 @@ const mongo = require('../config/db_mongoose');
 const db = require('../config/db_sequelize');
 const ficha = require('../models/ficha');
 
-if(!fs.existsSync(path.jon(__dirname, '../logs'))) fs.mkdirSync(path.join(__dirname, '../logs'));
+if(!fs.existsSync(path.join(__dirname, '../logs'))) fs.mkdirSync(path.join(__dirname, '../logs'));
 
 function log_erro(erro){
     const mensagem = new Date().toLocaleString() + ' - ' + erro.mensagem + '\n';
@@ -105,7 +105,7 @@ exports.atualizarPorId = async (req, res)=>{
     });
 }
 
-exports.exibirCadastro = (req, res) => {
+exports.exibirIndex = (req, res) => {
     res.sendFile(path.join(__dirname, '../pages/indexFichas.html'));
 
 };
