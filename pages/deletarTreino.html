@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Deletar Treino</title>
+</head>
+<body>
+  <h1>Deletar treino</h1>
+
+  <form id="formDeletarTreino">
+    <p>ID:</p>
+    <input type="number" name="id" required>
+
+    <button type="submit">Deletar</button>
+  </form>
+
+  <p id="mensagem"></p>
+
+  <script>
+    const form = document.getElementById('formDeletarTreino');
+    const mensagem = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const id = form.elements.id.value;
+
+      const resposta = await fetch(`/treinos/${id}`, {
+        method: 'DELETE'
+      });
+
+      mensagem.textContent = await resposta.text();
+
+      if (resposta.ok) {
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>

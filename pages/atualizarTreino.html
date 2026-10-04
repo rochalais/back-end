@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Atualizar Treino</title>
+</head>
+<body>
+  <h1>Atualizar treino</h1>
+
+  <form id="formAtualizarTreino">
+    <p>ID:</p>
+    <input type="number" name="id" required>
+
+    <p>Nome do treino:</p>
+    <input type="text" name="treinoNome" required>
+
+    <p>Objetivo:</p>
+    <input type="text" name="treinoObjetivo" required>
+
+    <p>ID do aluno:</p>
+    <input type="number" name="alunoId" min="1" required>
+
+    <p>Data de início:</p>
+    <input type="date" name="treinoDataIn" required>
+
+    <p>Data de fim:</p>
+    <input type="date" name="treinoDataFim" required>
+
+    <button type="submit">Atualizar</button>
+  </form>
+
+  <p id="mensagem"></p>
+
+  <script>
+    const form = document.getElementById('formAtualizarTreino');
+    const mensagem = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const id = form.elements.id.value;
+
+      const resposta = await fetch(`/treinos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          treinoNome: form.elements.treinoNome.value,
+          treinoObjetivo: form.elements.treinoObjetivo.value,
+          alunoId: Number(form.elements.alunoId.value),
+          treinoDataIn: form.elements.treinoDataIn.value,
+          treinoDataFim: form.elements.treinoDataFim.value
+        })
+      });
+
+      mensagem.textContent = await resposta.text();
+    });
+  </script>
+</body>
+</html>
