@@ -71,7 +71,7 @@ exports.listar = async (req, res) => {
         console.error('ERRO AO LISTAR TREINOS:', erro);
         registrarErro(erro);
 
-    res.status(500).send('Erro ao listar treinos');
+        res.status(500).send('Erro ao listar treinos');
 
     }
 };
@@ -176,9 +176,9 @@ exports.cadastrar = async (req, res) => {
     } catch (erro) {
 
         console.error('ERRO AO CADASTRAR TREINO:', erro);
-    registrarErro(erro);
+        registrarErro(erro);
 
-    res.status(500).send('Erro ao cadastrar treino');
+        res.status(500).send('Erro ao cadastrar treino');
 
     }
 };
@@ -281,4 +281,19 @@ exports.deletar = async (req, res) => {
         res.status(500).send('Erro ao deletar treino');
 
     }
+};
+
+
+// Páginas de Treino
+
+exports.exibirCadastro = (req, res) => {
+    res.sendFile(path.join(__dirname, '../pages/cadastroTreino.html'));
+};
+
+exports.exibirAtualizar = (req, res) => {
+    res.sendFile(path.join(__dirname, '../pages/atualizarTreino.html'));
+};
+
+exports.exibirDeletar = (req, res) => {
+    res.sendFile(path.join(__dirname, '../pages/deletarTreino.html'));
 };
