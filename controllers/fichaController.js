@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const mongoose = require('mongoose')
 const mongo = require('../config/db_mongoose');
 const db = require('../config/db_sequelize');
 const ficha = require('../models/ficha');
@@ -7,7 +8,7 @@ const ficha = require('../models/ficha');
 if(!fs.existsSync(path.join(__dirname, '../logs'))) fs.mkdirSync(path.join(__dirname, '../logs'));
 
 function log_erro(erro){
-    const mensagem = new Date().toLocaleString() + ' - ' + erro.mensagem + '\n';
+    const mensagem = new Date().toLocaleString() + ' - ' + erro.message + '\n';
     fs.appendFileSync(path.join(__dirname, '../logs/errors.log'), mensagem);
 }
 
@@ -18,7 +19,7 @@ function log_transacao(transacao){
 
 exports.cadastrarFicha = async (req, res) => {
     try{
-        const{treinoId, exercicos, dia} = req.body;
+        const{treinoId, exercicios, dia} = req.body;
 
         if(exercicios.length === 0) return res.status(400).send('Informe ao menos um exercício');
         if(dia > 7 || dia < 1) return res.status(400).send('Informe um dia de semana válido');
@@ -49,7 +50,7 @@ exports.consultarPorTreinoId = async (req, res)=>{
         const treino = await db.treino.findByPk(treinoId);
         if (!treino) return res.status(404).send('Treino não encontrado');
 
-        const fichas = await Ficha.find({ treinoId }).sort({ dia: 1 }).select('-__v').lean();
+        const fichas = await ficha.find({ treinoId }).sort({ dia: 1 }).select('-__v').lean();
         if (fichas.length === 0) {
             return res.status(404).send('Nenhuma ficha encontrada para este treino');
         }
@@ -62,12 +63,28 @@ exports.consultarPorTreinoId = async (req, res)=>{
     }
 }
 
-exports.deletarPorId = async (req, res)=>{
-    Ficha.deleteOne({ _id: req.params.id }).then(r => {
-        if (r.deletedCount === 0) return res.status(404).send('Ficha não encontrada');
-        res.send('Ficha deletada');
-    }).catch(erro => { registrarErro(erro); res.status(500).send('Erro ao deletar'); });
-}
+exports.deletarPorId = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).send('ID inválido');
+        }
+
+        const fichaDeletada = await ficha.findByIdAndDelete(id);
+
+        if (!fichaDeletada) {
+            return res.status(404).send('Ficha não encontrada');
+        }
+
+        log_transacao(`Deletada ficha ${fichaDeletada._id} (treino ${fichaDeletada.treinoId}, dia ${fichaDeletada.dia})`);
+        return res.status(200).send('Ficha deletada');
+
+    } catch (e) {
+        log_erro(e);
+        res.status(500).send('Erro ao deletar ficha');
+    }
+};
 
 exports.atualizarPorId = async (req, res)=>{
     const { id } = req.params;
@@ -91,10 +108,10 @@ exports.atualizarPorId = async (req, res)=>{
         return res.status(400).send('exercicios deve ser um array com ao menos um item');
     }
 
-    Ficha.findByIdAndUpdate(id, { $set: campos }, { new: true, runValidators: true }).select('-__v').then(ficha => {
+    ficha.findByIdAndUpdate(id, { $set: campos }, { new: true, runValidators: true }).select('-__v').then(ficha => {
         if (!ficha) return res.status(404).send('Ficha não encontrada');
 
-        registrarLog(`Ficha ${ficha._id} atualizada (campos: ${Object.keys(campos).join(', ')})`);
+        log_transacao(`Ficha ${ficha._id} atualizada (campos: ${Object.keys(campos).join(', ')})`);
         res.json({ mensagem: 'Ficha atualizada', ficha });
     }).catch(erro => {
         log_erro(erro);

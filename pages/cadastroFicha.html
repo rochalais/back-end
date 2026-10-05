@@ -112,15 +112,16 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dados)
                     });
+                    
+                    const texto = await resposta.text();
 
                     if (resposta.ok) {
-                        const corpo = await resposta.json();
-                        mostrarMensagem(`${corpo.mensagem} (id: ${corpo.id})`, 'ok');
+                        mostrarMensagem(texto, 'ok');
                         formulario.reset();
                         lista.innerHTML = '';
                         adicionarLinha();
                     } else {
-                        mostrarMensagem(await resposta.text(), 'erro');
+                        mostrarMensagem(texto, 'erro');
                     }
                 } catch (erro) {
                     console.error(erro);
